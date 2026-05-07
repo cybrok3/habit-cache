@@ -26,16 +26,27 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+// Load my pixel font
 val PixelFont = FontFamily(Font(R.font.press_start_2p))
+
+// Make all boxes have sharp edges
 val ZeroCornerShape = RoundedCornerShape(0.dp)
-val ButtonBorderThickness = 2.dp
+
+// General button border thickness tweaker
+val ButtonBorderThickness = 5.dp
 
 @Composable
 fun HabitCacheApp(
     isDarkTheme: Boolean,
     onToggleTheme: () -> Unit
 ) {
+    // Get access to android system context e.g. files/data
     val context = LocalContext.current
+    /**
+     * Run this block once, keep the result, and reuse it during future recompositions.
+     * Open the "habit_cache_daily_store" file that only you have private access at,
+     * and remember the key-value pairs
+     */
     val prefs = remember {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
@@ -104,7 +115,7 @@ fun HabitCacheApp(
     if (!trackingStarted) {
         MenuScreen(
             currentDate = currentDate,
-            startTrackingLabel = if (startedToday) "Resume" else "Start Tracking",
+            startTrackingLabel = if (startedToday) "Resume" else "Start",
             isDarkTheme = isDarkTheme,
             onToggleTheme = onToggleTheme,
             onStartTracking = {

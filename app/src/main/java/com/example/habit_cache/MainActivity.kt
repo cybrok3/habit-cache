@@ -16,12 +16,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.habit_cache.ui.theme.HabitcacheTheme
 
+/**
+ * MainActivity.kt
+ *     Android starts here.
+ *     Sets up Compose.
+ *     Stores dark mode state.
+ *     Applies HabitcacheTheme.
+ *     Calls HabitCacheApp.
+ */
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // This is my UI using the Jetpack Compose
         setContent {
             var isDarkTheme by rememberSaveable { mutableStateOf(false) }
 
+            // Theme wrapper
             HabitcacheTheme(darkTheme = isDarkTheme, dynamicColor = false) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
