@@ -5,6 +5,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/**
+ * This file is directing the data part of the app, counters dates, etc.
+ */
+
+// Preferences key names
 const val PREFS_NAME = "habit_cache_daily_store"
 private const val KEY_DATE = "date"
 private const val KEY_COFFEE = "coffee"
@@ -13,6 +18,7 @@ private const val KEY_CIGGIES = "ciggies"
 private const val KEY_CALORIES = "calories"
 private const val KEY_STARTED_TODAY = "started_today"
 
+// Data class for the daily habit state
 data class DailyHabitState(
     val date: String,
     val startedToday: Boolean,
@@ -31,6 +37,7 @@ fun todayKey(): String {
     return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 }
 
+// For more pretty display of the day of the date displayed in menu screen
 private fun ordinalSuffix(day: Int): String {
     if (day % 100 in 11..13) return "th"
     return when (day % 10) {
@@ -41,6 +48,7 @@ private fun ordinalSuffix(day: Int): String {
     }
 }
 
+// This function formats the date parts for displaying on the menu screen
 fun displayDateFromKey(key: String): DisplayDateParts {
     val parts = key.split("-")
     if (parts.size != 3) return DisplayDateParts(key, "")
@@ -61,6 +69,7 @@ fun displayDateFromKey(key: String): DisplayDateParts {
     )
 }
 
+// Loads state of the habits counters according to the day, if new day we have clean data by default
 fun readOrResetForToday(prefs: SharedPreferences, today: String): DailyHabitState {
     val savedDate = prefs.getString(KEY_DATE, null)
     return if (savedDate == today) {
@@ -75,10 +84,11 @@ fun readOrResetForToday(prefs: SharedPreferences, today: String): DailyHabitStat
     } else {
         val resetState = DailyHabitState(today, false, 0, 0, 0, 0)
         writeDailyState(prefs, resetState)
-        resetState
+        resetState // Return this reseted state
     }
 }
 
+// Writes state on the preferences
 fun writeDailyState(prefs: SharedPreferences, state: DailyHabitState) {
     prefs.edit()
         .putString(KEY_DATE, state.date)

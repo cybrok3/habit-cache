@@ -8,10 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.habit_cache.ui.theme.HabitcacheTheme
@@ -20,7 +16,6 @@ import com.example.habit_cache.ui.theme.HabitcacheTheme
  * MainActivity.kt
  *     Android starts here.
  *     Sets up Compose.
- *     Stores dark mode state.
  *     Applies HabitcacheTheme.
  *     Calls HabitCacheApp.
  */
@@ -30,10 +25,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // This is my UI using the Jetpack Compose
         setContent {
-            var isDarkTheme by rememberSaveable { mutableStateOf(false) }
-
             // Theme wrapper
-            HabitcacheTheme(darkTheme = isDarkTheme, dynamicColor = false) {
+            HabitcacheTheme(darkTheme = true, dynamicColor = false) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -43,10 +36,7 @@ class MainActivity : ComponentActivity() {
                             .fillMaxSize()
                             .padding(12.dp)
                     ) {
-                        HabitCacheApp(
-                            isDarkTheme = isDarkTheme,
-                            onToggleTheme = { isDarkTheme = !isDarkTheme }
-                        )
+                        HabitCacheApp()
                     }
                 }
             }

@@ -36,10 +36,7 @@ val ZeroCornerShape = RoundedCornerShape(0.dp)
 val ButtonBorderThickness = 5.dp
 
 @Composable
-fun HabitCacheApp(
-    isDarkTheme: Boolean,
-    onToggleTheme: () -> Unit
-) {
+fun HabitCacheApp() {
     // Get access to android system context e.g. files/data
     val context = LocalContext.current
     /**
@@ -51,6 +48,7 @@ fun HabitCacheApp(
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
+    // All the variables the app needs
     var trackingStarted by rememberSaveable { mutableStateOf(false) }
     var currentDate by remember { mutableStateOf(todayKey()) }
     var startedToday by remember { mutableStateOf(false) }
@@ -59,6 +57,7 @@ fun HabitCacheApp(
     var ciggies by rememberSaveable { mutableIntStateOf(0) }
     var calories by rememberSaveable { mutableIntStateOf(0) }
 
+    // Function for reading from storage and updating all the variables
     fun loadStateForToday() {
         val state = readOrResetForToday(prefs, todayKey())
         currentDate = state.date
@@ -116,8 +115,6 @@ fun HabitCacheApp(
         MenuScreen(
             currentDate = currentDate,
             startTrackingLabel = if (startedToday) "Resume" else "Start",
-            isDarkTheme = isDarkTheme,
-            onToggleTheme = onToggleTheme,
             onStartTracking = {
                 loadStateForToday()
                 if (!startedToday) {
