@@ -23,6 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * This file directs the UI elements of the Tracking screen of the app
+ */
+
 @Composable
 fun TrackingScreen(
     coffee: Int,

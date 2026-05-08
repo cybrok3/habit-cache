@@ -21,38 +21,43 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+/**
+ * This file directs the UI elements of the Menu screen of the app
+ */
+
+// UI Composable function for the menu screen
 @Composable
 fun MenuScreen(
     currentDate: String,
-    startTrackingLabel: String,
-    onStartTracking: () -> Unit
+    startTrackingLabel: String, // The text of the Start tracking button, either "Start"" or "Resume"
+    onStartTracking: () -> Unit // Callback function, the UI calls it when the 'Start' button is pressed, this function does not know what it calls
 ) {
-    val displayDate = remember(currentDate) { displayDateFromKey(currentDate) }
+    val displayDate = remember(currentDate) { displayDateFromKey(currentDate) } // Format the date and display it, remember it until currentDate changes
 
-    Box(
+    Box( // the outer-most container
         modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp)
+            .fillMaxSize() // Fill the whole screen
+            .padding(24.dp) // General padding of the outer container
     ) {
-        Box(
+        Box( // Date area box
             modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(top = 20.dp)
+                .align(Alignment.TopStart) // Top left
+                .padding(top = 20.dp) // Little padding on the top
                 .width(176.dp)
                 .height(86.dp)
         ) {
-            Column(
+            Column( // Date Column for vertical placement of the children elements
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(3.dp),
                 horizontalAlignment = Alignment.Start
             ) {
-                AutoFitDateLine(
+                AutoFitDateLine( // Top date line
                     text = displayDate.topLine,
                     minFontSize = 11.sp,
                     maxFontSize = 17.sp,
                     modifier = Modifier.fillMaxWidth()
                 )
-                AutoFitDateLine(
+                AutoFitDateLine( // Bot date line
                     text = displayDate.bottomLine,
                     minFontSize = 18.sp,
                     maxFontSize = 32.sp,
@@ -61,24 +66,24 @@ fun MenuScreen(
             }
         }
 
-        Column(
+        Column( // Stack vertically the App Title text and the buttons
             modifier = Modifier.align(Alignment.Center),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
+            Text( // App title
                 text = "Habit\nCache",
                 fontSize = 32.sp,
                 fontFamily = PixelFont,
                 lineHeight = 42.sp,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(28.dp))
-            Column(
+            Spacer(modifier = Modifier.height(28.dp)) // A little space below the Title and above the column of the buttons
+            Column( // For the buttons stack
                 modifier = Modifier.fillMaxWidth(0.82f),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                OutlinedButton(
+                OutlinedButton( // Start button look and fucntionality
                     onClick = onStartTracking,
                     shape = ZeroCornerShape,
                     border = BorderStroke(ButtonBorderThickness, MaterialTheme.colorScheme.primary),
@@ -86,7 +91,7 @@ fun MenuScreen(
                         .fillMaxWidth()
                         .height(60.dp)
                 ) {
-                    AutoFitDateLine(
+                    AutoFitDateLine( // Button text content
                         text = startTrackingLabel,
                         minFontSize = 11.sp,
                         maxFontSize = 16.sp,
@@ -95,7 +100,7 @@ fun MenuScreen(
                     )
                 }
 
-                OutlinedButton(
+                OutlinedButton( // Options Button looks
                     onClick = { },
                     shape = ZeroCornerShape,
                     border = BorderStroke(ButtonBorderThickness, MaterialTheme.colorScheme.primary),
@@ -103,7 +108,7 @@ fun MenuScreen(
                         .fillMaxWidth()
                         .height(60.dp)
                 ) {
-                    AutoFitDateLine(
+                    AutoFitDateLine( // Options button content
                         text = "Options",
                         minFontSize = 11.sp,
                         maxFontSize = 16.sp,

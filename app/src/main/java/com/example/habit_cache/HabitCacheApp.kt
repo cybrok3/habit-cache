@@ -24,7 +24,10 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+
+/**
+ * Main Habit cache app
+ */
 
 // Load my pixel font
 val PixelFont = FontFamily(Font(R.font.press_start_2p))
