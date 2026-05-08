@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
  * This file directs the UI elements of the Tracking screen of the app
  */
 
+// This function takes the variables from the memory and the callback functions to start the tracking process
 @Composable
 fun TrackingScreen(
     coffee: Int,
@@ -39,12 +40,12 @@ fun TrackingScreen(
     onCiggiesIncrement: () -> Unit,
     onCaloriesIncrement: () -> Unit
 ) {
-    Box(
+    Box( // Outer-most box
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp)
     ) {
-        OutlinedButton(
+        OutlinedButton( // Clear cache button
             onClick = onClearCache,
             shape = ZeroCornerShape,
             border = BorderStroke(ButtonBorderThickness, MaterialTheme.colorScheme.primary),
@@ -59,7 +60,7 @@ fun TrackingScreen(
             )
         }
 
-        Box(
+        Box( // Today's Habits title top left
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .padding(top = 20.dp)
@@ -88,7 +89,7 @@ fun TrackingScreen(
             }
         }
 
-        Column(
+        Column( // the habits list, with the counters
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 140.dp),
@@ -102,6 +103,7 @@ fun TrackingScreen(
     }
 }
 
+// Function to dynamically add each row, without hardcoding them
 @Composable
 fun HabitRow(name: String, count: Int, onIncrement: () -> Unit) {
     androidx.compose.foundation.layout.Row(
