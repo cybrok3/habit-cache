@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -55,20 +54,15 @@ fun HabitCacheApp() {
     var trackingStarted by rememberSaveable { mutableStateOf(false) }
     var currentDate by remember { mutableStateOf(todayKey()) }
     var startedToday by remember { mutableStateOf(false) }
-    var coffee by rememberSaveable { mutableIntStateOf(0) }
-    var iqos by rememberSaveable { mutableIntStateOf(0) }
-    var ciggies by rememberSaveable { mutableIntStateOf(0) }
-    var calories by rememberSaveable { mutableIntStateOf(0) }
+    var entries by remember { mutableStateOf<List<HabitEntry>>(emptyList()) }
+
 
     // Function for reading from storage and updating all the variables
     fun loadStateForToday() {
         val state = readOrResetForToday(prefs, todayKey())
         currentDate = state.date
         startedToday = state.startedToday
-        coffee = state.coffee
-        iqos = state.iqos
-        ciggies = state.ciggies
-        calories = state.calories
+        entries = state.entries
     }
 
     fun saveCurrentState() {
@@ -77,32 +71,28 @@ fun HabitCacheApp() {
             DailyHabitState(
                 date = currentDate,
                 startedToday = startedToday,
-                coffee = coffee,
-                iqos = iqos,
-                ciggies = ciggies,
-                calories = calories
+                entries = entries
             )
         )
     }
 
-    fun incrementWithDateCheck(update: () -> Unit) {
+    fun incrementHabit(habitId: String) {
         if (todayKey() != currentDate) {
             loadStateForToday()
         }
-        update()
-        if (!startedToday) {
-            startedToday = true
+
+        entries = entries.map { e ->
+            if (e.habitId == habitId) e.copy(value = e.value + 1f) else e
         }
+
+        if (!startedToday) startedToday = true
         saveCurrentState()
     }
 
     fun clearCurrentDayCache() {
         currentDate = todayKey()
         startedToday = false
-        coffee = 0
-        iqos = 0
-        ciggies = 0
-        calories = 0
+        entries = DEFAULT_HABITS.map { HabitEntry(it.id, 0f) }
         saveCurrentState()
     }
 
@@ -129,15 +119,10 @@ fun HabitCacheApp() {
         )
     } else {
         TrackingScreen(
-            coffee = coffee,
-            iqos = iqos,
-            ciggies = ciggies,
-            calories = calories,
+            habits = DEFAULT_HABITS,
+            entries = entries,
             onClearCache = { clearCurrentDayCache() },
-            onCoffeeIncrement = { incrementWithDateCheck { coffee++ } },
-            onIqosIncrement = { incrementWithDateCheck { iqos++ } },
-            onCiggiesIncrement = { incrementWithDateCheck { ciggies++ } },
-            onCaloriesIncrement = { incrementWithDateCheck { calories++ } }
+            onIncrementHabit = { habitId -> incrementHabit(habitId) }
         )
     }
 }

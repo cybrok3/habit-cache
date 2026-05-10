@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.util.Locale
 
 /**
  * This file directs the UI elements of the Tracking screen of the app
@@ -31,15 +32,10 @@ import androidx.compose.ui.unit.sp
 // This function takes the variables from the memory and the callback functions to start the tracking process
 @Composable
 fun TrackingScreen(
-    coffee: Int,
-    iqos: Int,
-    ciggies: Int,
-    calories: Int,
+    habits: List<Habit>,
+    entries: List<HabitEntry>,
     onClearCache: () -> Unit,
-    onCoffeeIncrement: () -> Unit,
-    onIqosIncrement: () -> Unit,
-    onCiggiesIncrement: () -> Unit,
-    onCaloriesIncrement: () -> Unit
+    onIncrementHabit: (String) -> Unit
 ) {
     Box( // Outer-most box
         modifier = Modifier
@@ -92,29 +88,38 @@ fun TrackingScreen(
             }
         }
 
-        Column( // the habits list, with the counters
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 140.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            HabitRow("Coffee", coffee, onCoffeeIncrement)
-            HabitRow("IQOS", iqos, onIqosIncrement)
-            HabitRow("Ciggies", ciggies, onCiggiesIncrement)
-            HabitRow("Calories", calories, onCaloriesIncrement)
+            habits.forEach { habit ->
+                val value = entries.firstOrNull { it.habitId == habit.id }?.value ?: 0f
+                HabitRow(
+                    habit = habit,
+                    value = value,
+                    onIncrement = { onIncrementHabit(habit.id) }
+                )
+            }
         }
     }
 }
 
 // Function to dynamically add each row, without hardcoding them
 @Composable
-fun HabitRow(name: String, count: Int, onIncrement: () -> Unit) {
+fun HabitRow(habit: Habit, value: Float, onIncrement: () -> Unit) {
+    val displayValue = when (habit.valueKind) {
+        HabitValueKind.INT -> value.toInt().toString()
+        HabitValueKind.FLOAT -> String.format(Locale.US, "%.1f", value)
+    }
+
     androidx.compose.foundation.layout.Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text("$name: $count", fontSize = 18.sp, fontFamily = PixelFont)
+        Text("${habit.name}: $displayValue", fontSize = 18.sp, fontFamily = PixelFont)
         OutlinedButton(
             onClick = onIncrement,
             shape = ZeroCornerShape,
@@ -126,3 +131,4 @@ fun HabitRow(name: String, count: Int, onIncrement: () -> Unit) {
         }
     }
 }
+
