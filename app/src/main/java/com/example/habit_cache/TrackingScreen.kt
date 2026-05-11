@@ -48,7 +48,7 @@ fun TrackingScreen(
     Box( // Outer-most box
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp)
+            .padding(top = 24.dp, end = 24.dp, bottom = 24.dp)
     ) {
         OutlinedButton( // Clear cache button
             onClick = onClearCache,
@@ -68,7 +68,7 @@ fun TrackingScreen(
         Box( // Today's Habits title top left
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(top = 20.dp)
+                .padding(start = 24.dp, top = 20.dp)
                 .width(176.dp)
                 .height(86.dp)
         ) {
@@ -129,7 +129,8 @@ fun HabitRow(habit: Habit, value: Float, onIncrement: () -> Unit) {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
-                modifier = Modifier.width(HabitIconSlotWidth),
+                modifier = Modifier
+                    .width(HabitIconSlotWidth),
                 contentAlignment = Alignment.CenterStart
             ) {
                 if (habit.iconRes != 0) {
