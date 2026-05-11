@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -20,11 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.snapping.SnapPosition
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.width
-import androidx.compose.ui.res.painterResource
 
 /**
  * This file directs the UI elements of the Menu screen of the app
@@ -96,56 +91,30 @@ fun MenuScreen(
                         .fillMaxWidth()
                         .height(60.dp)
                 ) {
-                    Box(modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center) {
-                        Image(
-                            painter = painterResource(id = R.drawable.start_icon),
-                            contentDescription = "Options icon",
-                            modifier = Modifier
-                                .align(Alignment.CenterStart)
-                                .padding (start = 20.dp)
-                                .size(32.dp)
-                        )
-                        Spacer(modifier = Modifier.padding(10.dp))
-                        Text(
-                            text = startTrackingLabel,
-                            fontFamily = PixelFont,
-                            fontSize = 16.sp,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
+                    AutoFitDateLine( // Button text content
+                        text = startTrackingLabel,
+                        minFontSize = 11.sp,
+                        maxFontSize = 16.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
 
                 OutlinedButton( // Options Button looks
                     onClick = { },
                     shape = ZeroCornerShape,
-                    contentPadding = PaddingValues(0.dp),
                     border = BorderStroke(ButtonBorderThickness, MaterialTheme.colorScheme.primary),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
                 ) {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.settings_icon),
-                            contentDescription = "Options icon",
-                            modifier = Modifier
-                                .align(Alignment.CenterStart)
-                                .padding(start = 26.dp)
-                                .size(32.dp)
-                        )
-                        Text(
-                            text = "Options",
-                            fontFamily = PixelFont,
-                            fontSize = 16.sp,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
+                    AutoFitDateLine( // Options button content
+                        text = "Options",
+                        minFontSize = 11.sp,
+                        maxFontSize = 16.sp,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }
