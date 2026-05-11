@@ -25,7 +25,6 @@ import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.res.painterResource
-import org.intellij.lang.annotations.JdkConstants
 
 /**
  * This file directs the UI elements of the Menu screen of the app
@@ -127,14 +126,16 @@ fun MenuScreen(
                         .fillMaxWidth()
                         .height(60.dp)
                 ) {
-                    Box(modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Image(
                             painter = painterResource(id = R.drawable.settings_icon),
                             contentDescription = "Options icon",
                             modifier = Modifier
                                 .align(Alignment.CenterStart)
-                                .padding (start = 26.dp)
+                                .padding(start = 26.dp)
                                 .size(32.dp)
                         )
                         Text(

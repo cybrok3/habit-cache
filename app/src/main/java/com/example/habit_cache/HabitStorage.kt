@@ -64,7 +64,7 @@ data class DisplayDateParts(
 val DEFAULT_HABITS = listOf(
     Habit("coffee", "Coffee", 0, HabitValueKind.INT, HabitActionType.INCREMENT_ONE),
     Habit("iqos", "IQOS", 0, HabitValueKind.INT, HabitActionType.INCREMENT_ONE),
-    Habit("ciggies", "Ciggies", 0, HabitValueKind.INT, HabitActionType.INCREMENT_ONE)
+    Habit("ciggies", "Ciggies", R.drawable.ciggy_icon, HabitValueKind.INT, HabitActionType.INCREMENT_ONE)
 )
 
 fun todayKey(): String {

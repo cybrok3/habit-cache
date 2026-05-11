@@ -1,10 +1,13 @@
 package com.example.habit_cache
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,6 +31,11 @@ import java.util.Locale
 /**
  * This file directs the UI elements of the Tracking screen of the app
  */
+
+private val HabitIconSlotWidth = 34.dp
+private val HabitIconSize = 30.dp
+private val HabitIconStartPadding = 0.dp
+private val HabitIconTextGap = 12.dp
 
 // This function takes the variables from the memory and the callback functions to start the tracking process
 @Composable
@@ -114,12 +122,29 @@ fun HabitRow(habit: Habit, value: Float, onIncrement: () -> Unit) {
         HabitValueKind.FLOAT -> String.format(Locale.US, "%.1f", value)
     }
 
-    androidx.compose.foundation.layout.Row(
+    Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text("${habit.name}: $displayValue", fontSize = 18.sp, fontFamily = PixelFont)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier.width(HabitIconSlotWidth),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                if (habit.iconRes != 0) {
+                    Image(
+                        painter = painterResource(id = habit.iconRes),
+                        contentDescription = "${habit.name} icon",
+                        modifier = Modifier
+                            .padding(start = HabitIconStartPadding)
+                            .size(HabitIconSize)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(HabitIconTextGap))
+            Text("${habit.name}: $displayValue", fontSize = 18.sp, fontFamily = PixelFont)
+        }
         OutlinedButton(
             onClick = onIncrement,
             shape = ZeroCornerShape,
@@ -131,4 +156,3 @@ fun HabitRow(habit: Habit, value: Float, onIncrement: () -> Unit) {
         }
     }
 }
-
