@@ -2,9 +2,14 @@ package com.example.habit_cache
 
 import android.content.Context
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,6 +41,7 @@ val ZeroCornerShape = RoundedCornerShape(0.dp)
 
 // General button border thickness tweaker
 val ButtonBorderThickness = 5.dp
+val PixelButtonShadowOffset = 3.dp
 
 @Composable
 fun HabitCacheApp() {
@@ -177,5 +183,26 @@ fun AutoFitDateLine(
             softWrap = false,
             modifier = Modifier.fillMaxWidth()
         )
+    }
+}
+
+@Composable
+fun PixelShadowBox(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Box(modifier = modifier) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .offset(x = PixelButtonShadowOffset, y = PixelButtonShadowOffset)
+                .background(
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                    shape = ZeroCornerShape
+                )
+        )
+        Box(modifier = Modifier.fillMaxSize()) {
+            content()
+        }
     }
 }

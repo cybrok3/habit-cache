@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +21,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.width
+import com.example.habit_cache.ui.theme.IronyBrickRed
+import com.example.habit_cache.ui.theme.IronyRed
+import com.example.habit_cache.ui.theme.IronyDarkRed
+import com.example.habit_cache.ui.theme.IronyMint
+import com.example.habit_cache.ui.theme.IronyTeal
+import com.example.habit_cache.ui.theme.IronyDeepTeal
+import com.example.habit_cache.ui.theme.IronySand
+import com.example.habit_cache.ui.theme.IronyOchre
+import com.example.habit_cache.ui.theme.IronyAmberBrown
+import com.example.habit_cache.ui.theme.IronyBurntOrange
+import com.example.habit_cache.ui.theme.IronySlateBlue
+import com.example.habit_cache.ui.theme.IronyNavy
 
 /**
  * This file directs the UI elements of the Menu screen of the app
@@ -33,6 +46,9 @@ fun MenuScreen(
     onStartTracking: () -> Unit // Callback function, the UI calls it when the 'Start' button is pressed, this function does not know what it calls
 ) {
     val displayDate = remember(currentDate) { displayDateFromKey(currentDate) } // Format the date and display it, remember it until currentDate changes
+    val buttonFillColor = IronyAmberBrown
+    val buttonBorderColor = IronyOchre
+    val buttonTextColor = IronySand
 
     Box( // the outer-most container
         modifier = Modifier
@@ -83,38 +99,54 @@ fun MenuScreen(
                 modifier = Modifier.fillMaxWidth(0.82f),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                OutlinedButton( // Start button look and functionality
-                    onClick = onStartTracking,
-                    shape = ZeroCornerShape,
-                    border = BorderStroke(ButtonBorderThickness, MaterialTheme.colorScheme.primary),
+                PixelShadowBox(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
                 ) {
-                    AutoFitDateLine( // Button text content
-                        text = startTrackingLabel,
-                        minFontSize = 11.sp,
-                        maxFontSize = 16.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    OutlinedButton( // Start button look and functionality
+                        onClick = onStartTracking,
+                        shape = ZeroCornerShape,
+                        border = BorderStroke(ButtonBorderThickness, buttonBorderColor),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = buttonFillColor,
+                            contentColor = buttonTextColor
+                        ),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        AutoFitDateLine( // Button text content
+                            text = startTrackingLabel,
+                            minFontSize = 11.sp,
+                            maxFontSize = 16.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
 
-                OutlinedButton( // Options Button looks
-                    onClick = { },
-                    shape = ZeroCornerShape,
-                    border = BorderStroke(ButtonBorderThickness, MaterialTheme.colorScheme.primary),
+                PixelShadowBox(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(60.dp)
                 ) {
-                    AutoFitDateLine( // Options button content
-                        text = "Options",
-                        minFontSize = 11.sp,
-                        maxFontSize = 16.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                    OutlinedButton( // Options Button looks
+                        onClick = { },
+                        shape = ZeroCornerShape,
+                        border = BorderStroke(ButtonBorderThickness, buttonBorderColor),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = buttonFillColor,
+                            contentColor = buttonTextColor
+                        ),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        AutoFitDateLine( // Options button content
+                            text = "Options",
+                            minFontSize = 11.sp,
+                            maxFontSize = 16.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
             }
         }

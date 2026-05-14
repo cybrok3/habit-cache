@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         // This is my UI using the Jetpack Compose
         setContent {
             // Theme wrapper
-            HabitcacheTheme(darkTheme = true, dynamicColor = false) {
+            HabitcacheTheme(darkTheme = false, dynamicColor = false) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

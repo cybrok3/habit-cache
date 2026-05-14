@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,7 +34,7 @@ import java.util.Locale
  */
 
 private val HabitIconSlotWidth = 34.dp
-private val HabitIconSize = 30.dp
+private val HabitIconSize = 50.dp
 private val HabitIconStartPadding = 0.dp
 private val HabitIconTextGap = 12.dp
 
@@ -45,24 +46,36 @@ fun TrackingScreen(
     onClearCache: () -> Unit,
     onIncrementHabit: (String) -> Unit
 ) {
+    val buttonFillColor = MaterialTheme.colorScheme.surface
+    val buttonBorderColor = MaterialTheme.colorScheme.primary
+    val buttonTextColor = MaterialTheme.colorScheme.onSurface
+
     Box( // Outer-most box
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 24.dp, end = 24.dp, bottom = 24.dp)
     ) {
-        OutlinedButton( // Clear cache button
-            onClick = onClearCache,
-            shape = ZeroCornerShape,
-            border = BorderStroke(ButtonBorderThickness, MaterialTheme.colorScheme.primary),
+        PixelShadowBox(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(top = 24.dp)
                 .size(48.dp)
         ) {
-            Icon(
-                painter = painterResource(id = android.R.drawable.ic_menu_delete),
-                contentDescription = "Clear today's cache"
-            )
+            OutlinedButton( // Clear cache button
+                onClick = onClearCache,
+                shape = ZeroCornerShape,
+                border = BorderStroke(ButtonBorderThickness, buttonBorderColor),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = buttonFillColor,
+                    contentColor = buttonTextColor
+                ),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Icon(
+                    painter = painterResource(id = android.R.drawable.ic_menu_delete),
+                    contentDescription = "Clear today's cache"
+                )
+            }
         }
 
         Box( // Today's Habits title top left
@@ -146,14 +159,20 @@ fun HabitRow(habit: Habit, value: Float, onIncrement: () -> Unit) {
             Spacer(modifier = Modifier.width(HabitIconTextGap))
             Text("${habit.name}: $displayValue", fontSize = 18.sp, fontFamily = PixelFont)
         }
-        OutlinedButton(
-            onClick = onIncrement,
-            shape = ZeroCornerShape,
-            border = BorderStroke(ButtonBorderThickness, MaterialTheme.colorScheme.primary),
-            modifier = Modifier.size(52.dp),
-            contentPadding = PaddingValues(0.dp)
-        ) {
-            Text("+1", fontFamily = PixelFont, fontSize = 12.sp)
+        PixelShadowBox(modifier = Modifier.size(52.dp)) {
+            OutlinedButton(
+                onClick = onIncrement,
+                shape = ZeroCornerShape,
+                border = BorderStroke(ButtonBorderThickness, MaterialTheme.colorScheme.primary),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                ),
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Text("+1", fontFamily = PixelFont, fontSize = 12.sp)
+            }
         }
     }
 }
