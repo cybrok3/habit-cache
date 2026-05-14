@@ -8,8 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,8 +25,10 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.example.habit_cache.ui.theme.HabitCacheColors
 
 /**
  * Main Habit cache app
@@ -37,11 +38,11 @@ import androidx.compose.ui.unit.dp
 val PixelFont = FontFamily(Font(R.font.press_start_2p))
 
 // Make all boxes have sharp edges
-val ZeroCornerShape = RoundedCornerShape(0.dp)
+val ZeroCornerShape = CutCornerShape(0.dp)
 
 // General button border thickness tweaker
 val ButtonBorderThickness = 5.dp
-val PixelButtonShadowOffset = 3.dp
+val PixelButtonShadowOffset = 5.dp
 
 @Composable
 fun HabitCacheApp() {
@@ -61,7 +62,7 @@ fun HabitCacheApp() {
     var currentDate by remember { mutableStateOf(todayKey()) }
     var startedToday by remember { mutableStateOf(false) }
     var entries by remember { mutableStateOf<List<HabitEntry>>(emptyList()) }
-
+    var addAmountHabitId by rememberSaveable { mutableStateOf<String?>(null) }
 
     // Function for reading from storage and updating all the variables
     fun loadStateForToday() {
@@ -91,6 +92,18 @@ fun HabitCacheApp() {
             if (e.habitId == habitId) e.copy(value = e.value + 1f) else e
         }
 
+        if (!startedToday) startedToday = true
+        saveCurrentState()
+    }
+
+    fun addToHabit(habitId: String, amount: Float) {
+        if (todayKey() != currentDate) {
+            loadStateForToday()
+        }
+
+        entries = entries.map { e ->
+            if (e.habitId == habitId) e.copy(value = e.value + amount) else e
+        }
         if (!startedToday) startedToday = true
         saveCurrentState()
     }
@@ -128,8 +141,18 @@ fun HabitCacheApp() {
             habits = DEFAULT_HABITS,
             entries = entries,
             onClearCache = { clearCurrentDayCache() },
-            onIncrementHabit = { habitId -> incrementHabit(habitId) }
+            onIncrementHabit = { habitId -> incrementHabit(habitId) },
+            onAddCustomHabit = {habitId -> addAmountHabitId = habitId}
         )
+        addAmountHabitId?.let { habitId ->
+            AddAmountDialog(
+                onDismiss = { addAmountHabitId = null },
+                onConfirm = { amount ->
+                    addToHabit(habitId, amount)
+                    addAmountHabitId = null
+                }
+            )
+        }
     }
 }
 
@@ -139,7 +162,8 @@ fun AutoFitDateLine(
     minFontSize: TextUnit,
     maxFontSize: TextUnit,
     textAlign: TextAlign = TextAlign.Start,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    color: Color = androidx.compose.ui.graphics.Color.Unspecified
 ) {
     val textMeasurer = rememberTextMeasurer()
     val density = LocalDensity.current
@@ -181,14 +205,53 @@ fun AutoFitDateLine(
             textAlign = textAlign,
             maxLines = 1,
             softWrap = false,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            color = color
         )
     }
 }
 
 @Composable
+fun AddAmountDialog(
+    onDismiss: () -> Unit,
+    onConfirm: (Float) -> Unit
+) {
+    var input by rememberSaveable { mutableStateOf("") }
+
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Add amount", fontFamily = PixelFont) },
+        text = {
+            androidx.compose.material3.OutlinedTextField(
+                value = input,
+                onValueChange = { input = it },
+                singleLine = true,
+                label = { Text("Amount") }
+            )
+        },
+        confirmButton = {
+            androidx.compose.material3.OutlinedButton(
+                onClick = {
+                    val amount = input.replace(',', '.').toFloatOrNull()
+                    if (amount != null && amount > 0f) onConfirm(amount)
+                },
+                shape = ZeroCornerShape
+            ) { Text("Add", fontFamily = PixelFont) }
+        },
+        dismissButton = {
+            androidx.compose.material3.OutlinedButton(
+                onClick = onDismiss,
+                shape = ZeroCornerShape
+            ) { Text("Cancel", fontFamily = PixelFont) }
+        }
+    )
+}
+
+@Composable
 fun PixelShadowBox(
     modifier: Modifier = Modifier,
+    shadowBaseColor: Color = HabitCacheColors.ShadowBase,
+    shadowAlpha: Float = HabitCacheColors.ShadowAlpha,
     content: @Composable () -> Unit
 ) {
     Box(modifier = modifier) {
@@ -197,7 +260,7 @@ fun PixelShadowBox(
                 .fillMaxSize()
                 .offset(x = PixelButtonShadowOffset, y = PixelButtonShadowOffset)
                 .background(
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.7f),
+                    color = shadowBaseColor.copy(alpha = shadowAlpha),
                     shape = ZeroCornerShape
                 )
         )

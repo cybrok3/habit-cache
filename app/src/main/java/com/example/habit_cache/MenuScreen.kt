@@ -21,18 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.width
-import com.example.habit_cache.ui.theme.IronyBrickRed
-import com.example.habit_cache.ui.theme.IronyRed
-import com.example.habit_cache.ui.theme.IronyDarkRed
-import com.example.habit_cache.ui.theme.IronyMint
-import com.example.habit_cache.ui.theme.IronyTeal
-import com.example.habit_cache.ui.theme.IronyDeepTeal
-import com.example.habit_cache.ui.theme.IronySand
-import com.example.habit_cache.ui.theme.IronyOchre
-import com.example.habit_cache.ui.theme.IronyAmberBrown
-import com.example.habit_cache.ui.theme.IronyBurntOrange
-import com.example.habit_cache.ui.theme.IronySlateBlue
-import com.example.habit_cache.ui.theme.IronyNavy
+import com.example.habit_cache.ui.theme.HabitCacheColors
 
 /**
  * This file directs the UI elements of the Menu screen of the app
@@ -46,9 +35,9 @@ fun MenuScreen(
     onStartTracking: () -> Unit // Callback function, the UI calls it when the 'Start' button is pressed, this function does not know what it calls
 ) {
     val displayDate = remember(currentDate) { displayDateFromKey(currentDate) } // Format the date and display it, remember it until currentDate changes
-    val buttonFillColor = IronyAmberBrown
-    val buttonBorderColor = IronyOchre
-    val buttonTextColor = IronySand
+    val buttonFillColor = HabitCacheColors.IronyAmberBrown
+    val buttonBorderColor = HabitCacheColors.IronyOchre
+    val buttonTextColor = HabitCacheColors.IronySand
 
     Box( // the outer-most container
         modifier = Modifier

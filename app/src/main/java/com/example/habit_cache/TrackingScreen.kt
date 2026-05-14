@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.habit_cache.ui.theme.HabitCacheColors
 import java.util.Locale
 
 /**
@@ -38,17 +39,19 @@ private val HabitIconSize = 50.dp
 private val HabitIconStartPadding = 0.dp
 private val HabitIconTextGap = 12.dp
 
+val buttonFillColor = HabitCacheColors.IronyAmberBrown
+val buttonBorderColor = HabitCacheColors.IronyOchre
+val buttonTextColor = HabitCacheColors.IronySand
+
 // This function takes the variables from the memory and the callback functions to start the tracking process
 @Composable
 fun TrackingScreen(
     habits: List<Habit>,
     entries: List<HabitEntry>,
     onClearCache: () -> Unit,
-    onIncrementHabit: (String) -> Unit
+    onIncrementHabit: (String) -> Unit,
+    onAddCustomHabit: (String) -> Unit
 ) {
-    val buttonFillColor = MaterialTheme.colorScheme.surface
-    val buttonBorderColor = MaterialTheme.colorScheme.primary
-    val buttonTextColor = MaterialTheme.colorScheme.onSurface
 
     Box( // Outer-most box
         modifier = Modifier
@@ -97,14 +100,16 @@ fun TrackingScreen(
                     textAlign = TextAlign.Start,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .offset(x = (-4).dp)
+                        .offset(x = (-4).dp),
+                    color = HabitCacheColors.IronyNavy
                 )
                 AutoFitDateLine(
                     text = "Habits",
                     minFontSize = 18.sp,
                     maxFontSize = 32.sp,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    color = HabitCacheColors.IronyNavy
                 )
             }
         }
@@ -120,7 +125,12 @@ fun TrackingScreen(
                 HabitRow(
                     habit = habit,
                     value = value,
-                    onIncrement = { onIncrementHabit(habit.id) }
+                    onIncrement = {
+                        when (habit.actionType) {
+                            HabitActionType.INCREMENT_ONE -> onIncrementHabit(habit.id)
+                            HabitActionType.ADD_CUSTOM -> onAddCustomHabit(habit.id) // your other function
+                        }
+                    }
                 )
             }
         }
@@ -157,21 +167,22 @@ fun HabitRow(habit: Habit, value: Float, onIncrement: () -> Unit) {
                 }
             }
             Spacer(modifier = Modifier.width(HabitIconTextGap))
-            Text("${habit.name}: $displayValue", fontSize = 18.sp, fontFamily = PixelFont)
+            Text("${habit.name}: $displayValue", fontSize = 15.sp, fontFamily = PixelFont, color = HabitCacheColors.IronyNavy)
         }
         PixelShadowBox(modifier = Modifier.size(52.dp)) {
             OutlinedButton(
                 onClick = onIncrement,
                 shape = ZeroCornerShape,
-                border = BorderStroke(ButtonBorderThickness, MaterialTheme.colorScheme.primary),
+                border = BorderStroke(ButtonBorderThickness, buttonBorderColor),
                 colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    contentColor = MaterialTheme.colorScheme.onSurface
+                    containerColor = buttonFillColor,
+                    contentColor = buttonTextColor
                 ),
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(0.dp)
             ) {
-                Text("+1", fontFamily = PixelFont, fontSize = 12.sp)
+                val actionLabel = if (habit.actionType == HabitActionType.ADD_CUSTOM) "+" else "+1"
+                Text(actionLabel, fontFamily = PixelFont, fontSize = 15.sp)
             }
         }
     }
